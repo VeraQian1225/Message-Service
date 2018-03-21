@@ -26,7 +26,7 @@ func sendSMS(writer http.ResponseWriter, request *http.Request) {
 }
 
 func getMsgInfo(Phone string, Bodymsg string, params *messagebird.MessageParams){
-	client := messagebird.New("ViJzmNPRl7BQwTMU7QBoYwhjx")
+	client := messagebird.New("")
 	message, err := client.NewMessage(
 		"1111",
 		[]string{Phone},
