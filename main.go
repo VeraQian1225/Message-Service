@@ -13,6 +13,13 @@ import (
 
 var info = make(map[string]string)
 
+func main() {
+	http.HandleFunc("/sendsms", sendSMS)
+	http.HandleFunc("/sendVM", sendVM)
+	http.HandleFunc("/processfeedback/script", feedback)
+	http.ListenAndServe(":8080", nil)
+}
+
 func sendSMS(writer http.ResponseWriter, request *http.Request) {
 	s := sixDigits()
 	ss := strconv.Itoa(int(s))
@@ -46,7 +53,7 @@ func getMsgInfo(Phone string, Bodymsg string, params *messagebird.MessageParams)
 func sendVM(writer http.ResponseWriter, request *http.Request) {
 	fmt.Fprintf(writer, "Vera is calling, %s!", request.URL.Query().Get("Phone"))
 	params := &messagebird.VoiceMessageParams{Reference: "MyReference"}
-	client := messagebird.New("ViJzmNPRl7BQwTMU7QBoYwhjx")
+	client := messagebird.New("")
 
 	message, err := client.NewVoiceMessage(
 		[]string{request.URL.Query().Get("Phone")},
@@ -68,13 +75,6 @@ func feedback(writer http.ResponseWriter, request *http.Request) {
 		writer.WriteHeader(500)
 		getMsgInfo(Phone, Bodymsg, params)
 	}
-}
-
-func main() {
-	http.HandleFunc("/sendsms", sendSMS)
-	http.HandleFunc("/sendVM", sendVM)
-	http.HandleFunc("/processfeedback/script", feedback)
-	http.ListenAndServe(":8080", nil)
 }
 
 func sixDigits() int64 {
