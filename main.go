@@ -12,6 +12,7 @@ import (
 )
 
 var info = make(map[string]string)
+var client = messagebird.New("")
 
 func main() {
 	http.HandleFunc("/sendsms", sendSMS)
@@ -33,7 +34,6 @@ func sendSMS(writer http.ResponseWriter, request *http.Request) {
 }
 
 func getMsgInfo(Phone string, Bodymsg string, params *messagebird.MessageParams){
-	client := messagebird.New("")
 	message, err := client.NewMessage(
 		"1111",
 		[]string{Phone},
@@ -53,8 +53,6 @@ func getMsgInfo(Phone string, Bodymsg string, params *messagebird.MessageParams)
 func sendVM(writer http.ResponseWriter, request *http.Request) {
 	fmt.Fprintf(writer, "Vera is calling, %s!", request.URL.Query().Get("Phone"))
 	params := &messagebird.VoiceMessageParams{Reference: "MyReference"}
-	client := messagebird.New("")
-
 	message, err := client.NewVoiceMessage(
 		[]string{request.URL.Query().Get("Phone")},
 		"Hello World",
